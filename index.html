@@ -1,0 +1,1804 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>SCIENTIA TUITION CENTRE - Student Portal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- PWA & App Mode Meta -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="SCIENTIA Portal">
+  <meta name="theme-color" content="#6c63ff">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" sizes="180x180" href="https://img.icons8.com/fluency/180/000000/school-building.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="https://img.icons8.com/fluency/192/000000/school-building.png">
+  <!-- PWA & App Mode Meta -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="SCIENTIA Portal">
+  <meta name="theme-color" content="#6c63ff">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" sizes="180x180" href="https://img.icons8.com/fluency/180/000000/school-building.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="https://img.icons8.com/fluency/192/000000/school-building.png">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Montserrat', Arial, sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+      background: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1500&q=80') no-repeat center center fixed;
+      background-size: cover;
+      position: relative;
+    }
+    body:before {
+      content: '';
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: linear-gradient(135deg, #a18cd1cc 0%, #fbc2ebcc 100%);
+      z-index: 0;
+      pointer-events: none;
+    }
+    .portal-container { position: relative; z-index: 1; }
+    .tab-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .subsection-btn {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+    .portal-container {
+      max-width: 1100px;
+      margin: 40px auto;
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 8px 40px rgba(80, 60, 120, 0.18);
+      padding: 40px 32px 32px 32px;
+      animation: fadeIn 1.2s cubic-bezier(.4,0,.2,1);
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(40px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    h1, h2, h3 {
+      text-align: center;
+      color: #6c63ff;
+      margin-bottom: 18px;
+      font-weight: 700;
+    }
+    .tab-nav {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      margin-bottom: 32px;
+      flex-wrap: wrap;
+    }
+    .section {
+      display: none;
+      animation: fadeIn 0.7s cubic-bezier(.4,0,.2,1);
+    }
+    .section.active {
+      display: block;
+    }
+    .form-group {
+      margin-bottom: 18px;
+    }
+    label {
+      display: block;
+      margin-bottom: 6px;
+      color: #333;
+      font-weight: 500;
+      font-size: 0.97rem;
+    }
+    /* Smaller label for Name, Register Number, Password */
+    .form-group label[for="loginName"],
+    .form-group label[for="loginRegno"],
+    .form-group label[for="loginPass"],
+    .form-group label[for="regName"],
+    .form-group label[for="regRegno"],
+    .form-group label[for="regPass"],
+    .form-group label[for="forgotName"],
+    .form-group label[for="forgotRegno"],
+    .form-group label[for="forgotNewPass"],
+    .form-group label[for="forgotConfirmPass"] {
+      font-size: 0.89rem !important;
+      letter-spacing: 0.01em;
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1.5px solid #bbb;
+      border-radius: 6px;
+      font-size: 0.97rem;
+      margin-bottom: 6px;
+      background: #f7f7fa;
+      transition: border 0.2s;
+    }
+    /* Smaller input for Name, Register Number, Password fields */
+    #loginName, #loginRegno, #loginPass,
+    #regName, #regRegno, #regPass,
+    #forgotName, #forgotRegno, #forgotNewPass, #forgotConfirmPass {
+      font-size: 0.89rem !important;
+      padding: 8px 10px !important;
+      height: 34px !important;
+      max-width: 320px;
+      margin-left: 0;
+    }
+    /* Custom Rounded Switch Checkbox for Role Selection */
+    .switch-checkbox {
+      display: none;
+    }
+    .switch-label {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      font-weight: 500;
+      margin-right: 18px;
+      user-select: none;
+      font-size: 1.05rem;
+    }
+    .switch-slider {
+      position: relative;
+      width: 44px;
+      height: 24px;
+      background: #e0c3fc;
+      border-radius: 24px;
+      margin-right: 10px;
+      transition: background 0.3s;
+      box-shadow: 0 1px 4px #a18cd133;
+    }
+    .switch-slider:before {
+      content: '';
+      position: absolute;
+      left: 4px;
+      top: 4px;
+      width: 16px;
+      height: 16px;
+      background: #fff;
+      border-radius: 50%;
+      transition: transform 0.3s, background 0.3s;
+      box-shadow: 0 1px 4px #a18cd133;
+    }
+    .switch-checkbox:checked + .switch-slider {
+      background: #6c63ff;
+    }
+    .switch-checkbox:checked + .switch-slider:before {
+      transform: translateX(20px);
+      background: #fbc2eb;
+    }
+    .switch-label-text {
+      color: #6c63ff;
+      transition: color 0.3s;
+    }
+    .switch-checkbox:checked ~ .switch-label-text {
+      color: #6c63ff;
+      font-weight: 700;
+    }
+    input:focus, select:focus, textarea:focus {
+      border: 1.5px solid #6c63ff;
+      outline: none;
+    }
+    button, .action-btn, .subsection-btn {
+      background: linear-gradient(90deg,#a18cd1 0%,#fbc2eb 100%);
+      color: #222;
+      border: none;
+      padding: 13px 30px;
+      border-radius: 10px;
+      font-size: 1.09rem;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 8px;
+      transition: background 0.18s, color 0.18s, box-shadow 0.18s, transform 0.18s;
+      min-width: 120px;
+      min-height: 44px;
+      box-shadow: 0 3px 14px #e0c3fc44;
+      display: inline-block;
+      letter-spacing: 0.3px;
+    }
+    button:hover, .action-btn:hover, .subsection-btn:hover {
+      background: linear-gradient(90deg,#6c63ff 0%,#a18cd1 100%);
+      color: #fff;
+      box-shadow: 0 6px 20px #a18cd1cc;
+      transform: translateY(-2px) scale(1.04);
+    }
+    #showPassBtn, #forgotPassBtn {
+      min-width: 90px;
+      min-height: 36px;
+      font-size: 1rem;
+      padding: 6px 16px;
+      background: #fffbe6;
+      color: #6c63ff;
+      border: 1.5px solid #a18cd1;
+      box-shadow: none;
+    }
+    #showPassBtn:hover, #forgotPassBtn:hover {
+      background: #fbc2eb;
+      color: #6c63ff;
+      border: 1.5px solid #6c63ff;
+    }
+    .error {
+      color: #dc3545;
+      margin-bottom: 12px;
+      text-align: center;
+      font-weight: 500;
+    }
+    .success {
+      color: #20bf6b;
+      margin-bottom: 12px;
+      text-align: center;
+      font-weight: 500;
+    }
+    .profile-table, .fees-table, .exam-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 18px;
+      background: #f7f7fa;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px #e0c3fc33;
+    }
+    .profile-table th, .fees-table th, .exam-table th {
+      background: #a18cd1;
+      color: #fff;
+      padding: 12px 8px;
+      font-weight: 700;
+    }
+    .profile-table td, .fees-table td, .exam-table td {
+      padding: 10px 8px;
+      border-bottom: 1px solid #e0c3fc;
+      text-align: center;
+    }
+    .profile-table tr:last-child td, .fees-table tr:last-child td, .exam-table tr:last-child td {
+      border-bottom: none;
+    }
+    .action-btn {
+      background: linear-gradient(90deg,#6c63ff 0%,#a18cd1 100%);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 20px;
+      font-size: 1.01rem;
+      margin: 0 4px;
+      cursor: pointer;
+      transition: background 0.18s, color 0.18s, box-shadow 0.18s, transform 0.18s;
+      box-shadow: 0 2px 8px #a18cd1aa;
+      font-weight: 700;
+      letter-spacing: 0.2px;
+    }
+    .action-btn:hover {
+      background: linear-gradient(90deg,#fbc2eb 0%,#a18cd1 100%);
+      color: #6c63ff;
+      box-shadow: 0 4px 16px #fbc2ebcc;
+      transform: translateY(-1px) scale(1.03);
+    }
+    .subsection-tabs {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 18px;
+      justify-content: center;
+    }
+    .subsection-btn {
+      width: 90px;
+      height: 90px;
+      min-width: 90px;
+      min-height: 90px;
+      max-width: 110px;
+      max-height: 110px;
+      border-radius: 18px;
+      font-size: 1.09rem;
+      font-weight: 700;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: linear-gradient(135deg,#fbc2eb 0%,#a18cd1 100%);
+      color: #6c63ff;
+      border: 2px solid #fff;
+      box-shadow: 0 2px 12px #a18cd144;
+      transition: box-shadow 0.18s, background 0.18s, color 0.18s, border 0.18s, transform 0.18s;
+      margin-bottom: 8px;
+      overflow: hidden;
+    }
+    .subsection-btn img {
+      height: 38px !important;
+      width: 38px !important;
+      margin-bottom: 2px;
+    }
+    .subsection-btn.active, .subsection-btn:hover {
+      background: linear-gradient(135deg,#a18cd1 0%,#fbc2eb 100%);
+      color: #fff;
+      border-color: #6c63ff;
+      box-shadow: 0 6px 20px #a18cd1cc;
+      transform: translateY(-2px) scale(1.08);
+    }
+    .dashboard-card, .square-card {
+      background: linear-gradient(135deg,#fbc2eb 0%,#a18cd1 100%);
+      border-radius: 18px;
+      box-shadow: 0 4px 24px #a18cd144;
+      width: 110px;
+      height: 110px;
+      min-width: 110px;
+      min-height: 110px;
+      max-width: 120px;
+      max-height: 120px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: box-shadow 0.22s, transform 0.22s, background 0.22s;
+      margin-bottom: 8px;
+      border: 2.5px solid #fff;
+      position: relative;
+      overflow: hidden;
+    }
+    .dashboard-card:hover, .dashboard-card:focus {
+      background: linear-gradient(135deg,#a18cd1 0%,#fbc2eb 100%);
+      box-shadow: 0 8px 32px #6c63ff55, 0 2px 8px #fff8;
+      transform: translateY(-4px) scale(1.07);
+      border-color: #6c63ff;
+      z-index: 2;
+    }
+    .dashboard-icon, .square-icon {
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 90px;
+      height: 90px;
+      border-radius: 18px;
+      background: #fff;
+      box-shadow: 0 2px 8px #a18cd133;
+      font-size: 2.5rem;
+      margin-left: auto;
+      margin-right: auto;
+      transition: box-shadow 0.2s, background 0.2s;
+    }
+    .dashboard-label {
+      font-size: 1.09rem;
+      font-weight: 700;
+      color: #6c63ff;
+      margin-top: 2px;
+      letter-spacing: 0.01em;
+      text-align: center;
+      word-break: break-word;
+    }
+    @media (max-width: 700px) {
+      .portal-container { padding: 16px 2vw; }
+      .tab-nav { gap: 10px; }
+      .subsection-tabs { flex-wrap: wrap; }
+      .dashboard-card, .square-card, .subsection-btn {
+        width: 90px !important;
+        height: 90px !important;
+        min-width: 90px !important;
+        min-height: 90px !important;
+        font-size: 0.98rem;
+      }
+      .dashboard-icon, .square-icon {
+        width: 54px !important;
+        height: 54px !important;
+        font-size: 2rem !important;
+      }
+      .tab-btn {
+        width: 48px;
+        height: 48px;
+        font-size: 0.98rem;
+      }
+    }
+    .fees-table.marvel-fees-table {
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 4px 24px #e2363640, 0 1.5px 0 #f9d923;
+      font-family: 'Montserrat', Arial, sans-serif;
+      font-size: 1.08rem;
+      letter-spacing: 0.01em;
+      margin-bottom: 18px;
+      animation: marvelFadeIn 0.7s cubic-bezier(.68,-0.55,.27,1.55);
+    }
+    @keyframes marvelFadeIn {
+      from { opacity: 0; transform: scale(0.97) translateY(20px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    .marvel-fees-table th {
+      font-size: 1.08rem;
+      font-weight: 700;
+      border: none;
+      padding: 12px 16px;
+      text-align: center;
+      letter-spacing: 0.03em;
+      text-shadow: 0 1px 0 #fff2, 0 2px 4px #0001;
+    }
+    .marvel-fees-table td {
+      padding: 10px 14px;
+      text-align: center;
+      border: none;
+      font-size: 1.04rem;
+      background: none;
+      transition: background 0.2s;
+    }
+    .marvel-fees-table tr {
+      transition: background 0.2s;
+    }
+    .marvel-fees-table tr:hover {
+      background: #f9d92322 !important;
+    }
+    .marvel-fees-table input[type="text"],
+    .marvel-fees-table input[type="number"],
+    .marvel-fees-table input[type="date"],
+    .marvel-fees-table textarea {
+      border-radius: 7px;
+      border: 1.5px solid #e23636;
+      padding: 5px 8px;
+      font-size: 1rem;
+      outline: none;
+      background: #fffbe6;
+      transition: border 0.2s;
+    }
+    .marvel-fees-table input:focus, .marvel-fees-table textarea:focus {
+      border: 2px solid #f9d923;
+      background: #fffde7;
+    }
+    .marvel-fees-table button.action-btn {
+      background: linear-gradient(90deg,#e23636 60%,#f9d923 100%);
+      color: #fff;
+      border: none;
+      border-radius: 7px;
+      padding: 6px 16px;
+      font-weight: 600;
+      font-size: 1rem;
+      margin: 0 2px;
+      box-shadow: 0 2px 8px #e2363620;
+      transition: background 0.2s, box-shadow 0.2s;
+      cursor: pointer;
+    }
+    .marvel-fees-table button.action-btn:hover {
+      background: linear-gradient(90deg,#f9d923 60%,#e23636 100%);
+      color: #222;
+      box-shadow: 0 4px 16px #f9d92330;
+    }
+  </style>
+  <script>
+    // Register service worker for PWA/app mode
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function() {
+        navigator.serviceWorker.register('sw.js').catch(function(e){});
+      });
+    }
+  </script>
+// Register service worker for PWA/mobile app support
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('./service-worker.js');
+}
+  <script>
+    // Register service worker for PWA/app mode
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function() {
+        navigator.serviceWorker.register('sw.js').catch(function(e){});
+      });
+    }
+  </script>
+<!-- Shareable Link Info for Easy Access -->
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "WebApplication",
+  "name": "SCIENTIA Tuition Centre Portal",
+  "url": "./StudentPortal.html",
+  "applicationCategory": "EducationApplication",
+  "operatingSystem": "All",
+  "browserRequirements": "Requires JavaScript. Works on PC and mobile browsers.",
+  "installUrl": "./StudentPortal.html"
+}
+</script>
+<!-- Shareable Link Info for Easy Access -->
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "WebApplication",
+  "name": "SCIENTIA Tuition Centre Portal",
+  "url": "./StudentPortal.html",
+  "applicationCategory": "EducationApplication",
+  "operatingSystem": "All",
+  "browserRequirements": "Requires JavaScript. Works on PC and mobile browsers.",
+  "installUrl": "./StudentPortal.html"
+}
+</script>
+</head>
+<body>
+  <div class="portal-container">
+    <!-- Portal share link removed as requested -->
+    <h1 style="display:flex;align-items:center;justify-content:center;gap:12px;">
+      <img src="https://img.icons8.com/fluency/48/000000/school-building.png" alt="Logo" style="height:44px;width:44px;vertical-align:middle;"> SCIENTIA TUITION CENTRE
+    </h1>
+    <div class="tab-nav" id="mainTabs"></div>
+    <div id="sectionContent"></div>
+  </div>
+  <script>
+    // Show portal link for sharing/app mode
+function showFeesSub() {
+    const feesHistory = JSON.parse(localStorage.getItem('feesHistory')) || [];
+    let html = '';
+    if (feesHistory.length === 0) {
+        html = '<p>No fees records found.</p>';
+    } else {
+        html = `<table class="marvel-table">
+            <thead>
+                <tr>
+                    <th>Receipt No</th>
+                    <th>Student ID</th>
+                    <th>Name</th>
+                    <th>Class</th>
+                    <th>Amount</th>
+                    <th>Date</th>
+                    <th>Payment Mode</th>
+                    <th>Remark</th>
+                </tr>
+            </thead>
+            <tbody>`;
+        feesHistory.forEach(fee => {
+            html += `<tr>
+                <td>${fee.receiptNo || ''}</td>
+                <td>${fee.studentId || ''}</td>
+                <td>${fee.name || ''}</td>
+                <td>${fee.class || ''}</td>
+                <td>${fee.amount || ''}</td>
+                <td>${fee.date || ''}</td>
+                <td>${fee.paymentMode || ''}</td>
+                <td>${fee.remark || ''}</td>
+            </tr>`;
+        });
+        html += '</tbody></table>';
+    }
+    document.getElementById('feesSubSection').innerHTML = html;
+}
+    // Structure: {user, regno, class, fatherName, fatherPhone, motherName, motherPhone, address, dob}
+    let studentProfiles = [];
+    let feesData = [];
+// Exam marks are now stored per exam name, grouped by class
+// Exam marks now support dynamic columns (fields)
+let examMarkData = {
+  columns: ['Register Number', 'Student Name', 'Class', 'Mark'], // default columns
+  exams: [] // [{examName, class, marks: [{Register Number, Student Name, Class, Mark, ...}]}]
+};
+    // feesHistory: [{name, regno, class, amount, month, type: 'receipt'|'history', date}]
+    let feesHistory = [];
+
+    // --- Persistent Storage Logic ---
+    function saveAllData() {
+      localStorage.setItem('portal_users', JSON.stringify(users));
+      localStorage.setItem('portal_studentProfiles', JSON.stringify(studentProfiles));
+      localStorage.setItem('portal_feesHistory', JSON.stringify(feesHistory));
+      localStorage.setItem('portal_examMarkData', JSON.stringify(examMarkData));
+    }
+    function loadAllData() {
+      try {
+        let u = localStorage.getItem('portal_users');
+        let s = localStorage.getItem('portal_studentProfiles');
+        let f = localStorage.getItem('portal_feesHistory');
+        let e = localStorage.getItem('portal_examMarkData');
+        if(u) users = JSON.parse(u);
+        if(s) studentProfiles = JSON.parse(s);
+        if(f) feesHistory = JSON.parse(f);
+        if(e) examMarkData = JSON.parse(e);
+      } catch(err) {
+        users = [];
+        studentProfiles = [];
+        feesHistory = [];
+        examMarkData = { columns: ['Register Number', 'Student Name', 'Class'], rows: [] };
+      }
+    }
+    function clearAllData() {
+      localStorage.removeItem('portal_users');
+      localStorage.removeItem('portal_studentProfiles');
+      localStorage.removeItem('portal_feesHistory');
+      localStorage.removeItem('portal_examMarkData');
+      users = [];
+      studentProfiles = [];
+      feesHistory = [];
+      examMarkData = { columns: ['Register Number', 'Student Name', 'Class'], rows: [] };
+      ensureHeadAdmin();
+      showTabs();
+      renderLogin();
+    }
+    // --- Portal Logic ---
+    // Utility
+    // Ensure head admin always exists in users array
+function ensureHeadAdmin() {
+  // Always ensure head admin exists and has password 'SA1001' and regno 'SA1001'
+  let head = users.find(u => u.role === 'admin' && u.user === 'Shahanas10S');
+  if (!head) {
+    users.push({ role: 'admin', user: 'Shahanas10S', pass: 'SA1001', regno: 'SA1001', class: '' });
+    saveAllData();
+  } else {
+    head.pass = 'SA1001';
+    head.regno = 'SA1001';
+    saveAllData();
+  }
+}
+    function isHeadAdmin() {
+      return currentRole === 'admin' && currentUser === 'Shahanas10S';
+    }
+    function showTabs(role) {
+      const tabIcons = {
+        profile: '<img src="https://img.icons8.com/fluency/24/000000/user-male-circle.png" style="height:22px;vertical-align:middle;">',
+        fees: '<img src="https://img.icons8.com/fluency/24/000000/money-bag.png" style="height:22px;vertical-align:middle;">',
+        exam: '<img src="https://img.icons8.com/fluency/24/000000/test-passed.png" style="height:22px;vertical-align:middle;">',
+        students: '<img src="https://img.icons8.com/fluency/24/000000/classroom.png" style="height:22px;vertical-align:middle;">',
+        adminusers: '<img src="https://img.icons8.com/fluency/24/000000/admin-settings-male.png" style="height:22px;vertical-align:middle;">',
+        logout: '<img src="https://img.icons8.com/fluency/24/000000/logout-rounded-left.png" style="height:22px;vertical-align:middle;">'
+      };
+      const tabs = [];
+      if (!role) {
+        tabs.push({id:'login',label:'Login'});
+        tabs.push({id:'register',label:'Register'});
+      } else {
+        // Do NOT add Home tab after login
+        tabs.push({id:'profile',label:'Profile'});
+        tabs.push({id:'fees',label:'Fees'});
+        tabs.push({id:'exam',label:'Exam Mark'});
+        if (role==='teacher'||role==='admin') tabs.unshift({id:'students',label:'Student Profiles'});
+        if (role==='admin') tabs.push({id:'adminusers',label:'All Users'});
+        tabs.push({id:'logout',label:'Logout'});
+      }
+      const nav = document.getElementById('mainTabs');
+      nav.innerHTML = '';
+      tabs.forEach(tab => {
+        const btn = document.createElement('button');
+        btn.className = 'tab-btn';
+        btn.innerHTML = (tabIcons[tab.id]||'')+" "+tab.label;
+        btn.onclick = () => showSection(tab.id);
+        btn.id = 'tab-'+tab.id;
+        nav.appendChild(btn);
+      });
+    }
+
+    function setActiveTab(id) {
+      document.querySelectorAll('.tab-btn').forEach(btn=>btn.classList.remove('active'));
+      const t=document.getElementById('tab-'+id);if(t)t.classList.add('active');
+    }
+
+    function showSection(id) {
+      setActiveTab(id);
+      if(id==='home') renderHome();
+      else if(id==='login') renderLogin();
+      else if(id==='register') renderRegister();
+      else if(id==='profile') renderProfile();
+      else if(id==='fees') renderFees();
+      else if(id==='exam') {
+        if(!examMarkData || !examMarkData.columns || !examMarkData.exams) examMarkData = { columns: ['Register Number', 'Student Name', 'Class', 'Mark'], exams: [] };
+        renderExam();
+      }
+      else if(id==='students') renderStudentProfiles();
+      else if(id==='adminusers') renderAdminUsers();
+      else if(id==='logout') { currentUser=null; currentRole=null; showTabs(); renderLogin(); }
+    }
+    // --- Home Page ---
+    function renderHome() {
+      if (!currentUser || !currentRole) {
+        // Show nothing or a minimal welcome if not logged in
+        document.getElementById('sectionContent').innerHTML = '';
+        setActiveTab('login');
+        return;
+      }
+      // Dashboard for logged-in user
+      let sections = [];
+      if(currentRole==='student') {
+        sections = [
+          {id:'profile', label:'Profile', icon:'<img src="https://img.icons8.com/fluency/32/user-male-circle.png" style="height:28px;vertical-align:middle;">'},
+          {id:'fees', label:'Fees', icon:'<img src="https://img.icons8.com/fluency/32/money-bag.png" style="height:28px;vertical-align:middle;">'},
+          {id:'exam', label:'Exam Mark', icon:'<img src="https://img.icons8.com/fluency/32/test-passed.png" style="height:28px;vertical-align:middle;">'},
+          {id:'logout', label:'Logout', icon:'<img src="https://img.icons8.com/fluency/32/logout-rounded-left.png" style="height:28px;vertical-align:middle;">'}
+        ];
+      } else if(currentRole==='teacher') {
+        sections = [
+          {id:'students', label:'Student Profiles', icon:'<img src="https://img.icons8.com/fluency/32/classroom.png" style="height:28px;vertical-align:middle;">'},
+          {id:'profile', label:'Profile', icon:'<img src="https://img.icons8.com/fluency/32/user-male-circle.png" style="height:28px;vertical-align:middle;">'},
+          {id:'fees', label:'Fees', icon:'<img src="https://img.icons8.com/fluency/32/money-bag.png" style="height:28px;vertical-align:middle;">'},
+          {id:'exam', label:'Exam Mark', icon:'<img src="https://img.icons8.com/fluency/32/test-passed.png" style="height:28px;vertical-align:middle;">'},
+          {id:'logout', label:'Logout', icon:'<img src="https://img.icons8.com/fluency/32/logout-rounded-left.png" style="height:28px;vertical-align:middle;">'}
+        ];
+      } else if(currentRole==='admin') {
+        sections = [
+          {id:'students', label:'Student Profiles', icon:'<img src="https://img.icons8.com/fluency/32/classroom.png" style="height:28px;vertical-align:middle;">'},
+          {id:'profile', label:'Profile', icon:'<img src="https://img.icons8.com/fluency/32/user-male-circle.png" style="height:28px;vertical-align:middle;">'},
+          {id:'fees', label:'Fees', icon:'<img src="https://img.icons8.com/fluency/32/money-bag.png" style="height:28px;vertical-align:middle;">'},
+          {id:'exam', label:'Exam Mark', icon:'<img src="https://img.icons8.com/fluency/32/test-passed.png" style="height:28px;vertical-align:middle;">'},
+          {id:'adminusers', label:'All Users', icon:'<img src="https://img.icons8.com/fluency/32/admin-settings-male.png" style="height:28px;vertical-align:middle;">'},
+          {id:'logout', label:'Logout', icon:'<img src="https://img.icons8.com/fluency/32/logout-rounded-left.png" style="height:28px;vertical-align:middle;">'}
+        ];
+      }
+      let html = `<div class='section active fade-in' style='text-align:center;'>
+        <img src='https://img.icons8.com/fluency/96/000000/school-building.png' alt='School' style='margin-bottom:18px;'>
+        <h2 style='color:#6c63ff;margin-bottom:8px;'>Welcome, ${currentUser}!</h2>
+        <div style='font-size:1.13rem;color:#444;max-width:600px;margin:0 auto 18px auto;'>
+          This is your dashboard. Use the sections below to navigate.<br><br>
+        </div>
+        <div style='display:flex;flex-wrap:wrap;justify-content:center;gap:32px 36px;margin:32px 0 0 0;'>`;
+      sections.forEach(s => {
+        html += `<div class='dashboard-card square-card' onclick='showSection("${s.id}")'>
+          <div class='dashboard-icon square-icon'>${s.icon.replace('height:54px;width:54px;','height:60px;width:60px;')}</div>
+          <div class='dashboard-label'>${s.label}</div>
+        </div>`;
+      });
+      html += `</div>
+      </div>`;
+      document.getElementById('sectionContent').innerHTML = html;
+      setActiveTab('home');
+    }
+
+    // --- Login/Register ---
+    function renderLogin() {
+      document.getElementById('sectionContent').innerHTML = `
+        <div class='section active fade-in'>
+          <h2>Login</h2>
+          <div id='loginError' class='error' style='display:none;'></div>
+          <form id='loginForm'>
+            <div class='form-group'><label>Role</label>
+              <div id='loginRoleCheckboxes' style='display:flex;gap:18px;'>
+                <label class='switch-label'><input type='checkbox' class='switch-checkbox' name='loginRole' value='student'><span class='switch-slider'></span><span class='switch-label-text'>Student</span></label>
+                <label class='switch-label'><input type='checkbox' class='switch-checkbox' name='loginRole' value='teacher'><span class='switch-slider'></span><span class='switch-label-text'>Teacher</span></label>
+                <label class='switch-label'><input type='checkbox' class='switch-checkbox' name='loginRole' value='admin'><span class='switch-slider'></span><span class='switch-label-text'>Admin</span></label>
+              </div>
+            </div>
+            <div class='form-group'><label>Name</label><input id='loginName' required></div>
+            <div class='form-group'><label>Register Number</label><input id='loginRegno'></div>
+            <div class='form-group'><label>Password</label>
+              <div style='position:relative;'>
+                <input id='loginPass' type='password' required style='padding-right:40px;'>
+                <button type='button' id='showPassBtn' style='position:absolute;right:6px;top:50%;transform:translateY(-50%);padding:4px 10px;font-size:0.95rem;background:#e0c3fc;color:#6c63ff;border-radius:6px;border:none;cursor:pointer;'>Show</button>
+              </div>
+            </div>
+            <div class='form-group student-only' style='display:none;'><label>Class</label><input id='loginClass'></div>
+            <button type='submit' style='margin-right:10px;'>Login</button>
+            <button type='button' id='forgotPassBtn' style='margin-left:10px;background:#fffbe6;color:#6c63ff;border:1.5px solid #a18cd1;'>Forgot Password?</button>
+          </form>
+        </div>`;
+      // Only allow one checkbox to be selected at a time (custom switch)
+      document.querySelectorAll('#loginRoleCheckboxes .switch-checkbox').forEach(cb => {
+        cb.onclick = function() {
+          document.querySelectorAll('#loginRoleCheckboxes .switch-checkbox').forEach(other => {
+            if(other!==cb) other.checked = false;
+          });
+          const v = cb.checked ? cb.value : '';
+          document.querySelectorAll('.student-only').forEach(e=>e.style.display=(v==='student'?'block':'none'));
+        };
+      });
+
+      // Show/hide password logic
+      const passInput = document.getElementById('loginPass');
+      const showBtn = document.getElementById('showPassBtn');
+      showBtn.onclick = function() {
+        if(passInput.type==='password') {
+          passInput.type='text';
+          showBtn.textContent='Hide';
+        } else {
+          passInput.type='password';
+          showBtn.textContent='Show';
+        }
+      };
+
+      // Forgot password logic
+      document.getElementById('forgotPassBtn').onclick = function() {
+        // Show forgot password form
+        let html = `<div class='section active fade-in'>
+          <h2>Reset/Set New Password</h2>
+          <div id='forgotError' class='error' style='display:none;'></div>
+          <form id='forgotForm'>
+            <div class='form-group'><label>Role</label>
+              <div id='forgotRoleCheckboxes' style='display:flex;gap:18px;'>
+                <label class='switch-label'><input type='checkbox' class='switch-checkbox' name='forgotRole' value='student'><span class='switch-slider'></span><span class='switch-label-text'>Student</span></label>
+                <label class='switch-label'><input type='checkbox' class='switch-checkbox' name='forgotRole' value='teacher'><span class='switch-slider'></span><span class='switch-label-text'>Teacher</span></label>
+                <label class='switch-label'><input type='checkbox' class='switch-checkbox' name='forgotRole' value='admin'><span class='switch-slider'></span><span class='switch-label-text'>Admin</span></label>
+              </div>
+            </div>
+            <div class='form-group'><label>Name</label><input id='forgotName' required></div>
+            <div class='form-group student-only' style='display:none;'><label>Register Number</label><input id='forgotRegno'></div>
+            <div class='form-group student-only' style='display:none;'><label>Class</label><input id='forgotClass'></div>
+            <div class='form-group'><label>New Password</label><input id='forgotNewPass' type='password' required></div>
+            <div class='form-group'><label>Confirm Password</label><input id='forgotConfirmPass' type='password' required></div>
+            <button type='submit'>Set Password</button>
+            <button type='button' id='forgotCancelBtn' style='margin-left:12px;'>Cancel</button>
+          </form>
+        </div>`;
+        document.getElementById('sectionContent').innerHTML = html;
+        // Only one role selectable
+        document.querySelectorAll('#forgotRoleCheckboxes .switch-checkbox').forEach(cb => {
+          cb.onclick = function() {
+            document.querySelectorAll('#forgotRoleCheckboxes .switch-checkbox').forEach(other => {
+              if(other!==cb) other.checked = false;
+            });
+            const v = cb.checked ? cb.value : '';
+            document.querySelectorAll('.student-only').forEach(e=>e.style.display=(v==='student'?'block':'none'));
+          };
+        });
+        document.getElementById('forgotCancelBtn').onclick = renderLogin;
+        document.getElementById('forgotForm').onsubmit = function(e) {
+          e.preventDefault();
+          let role = '';
+          document.querySelectorAll('#forgotRoleCheckboxes .switch-checkbox').forEach(cb=>{if(cb.checked)role=cb.value;});
+          if(!role) {
+            const err = document.getElementById('forgotError');
+            err.textContent = 'Please select a role!';
+            err.style.display = 'block';
+            return;
+          }
+          const name = document.getElementById('forgotName').value.trim();
+          let regno = '', className = '';
+          if(role==='student') {
+            regno = document.getElementById('forgotRegno').value.trim();
+            className = document.getElementById('forgotClass').value.trim();
+          }
+          const newPass = document.getElementById('forgotNewPass').value;
+          const confirmPass = document.getElementById('forgotConfirmPass').value;
+          if(newPass!==confirmPass) {
+            const err = document.getElementById('forgotError');
+            err.textContent = 'Passwords do not match!';
+            err.style.display = 'block';
+            return;
+          }
+          let user = users.find(u => u.role===role && u.user===name && (role!=='student'||(u.regno===regno&&u.class===className)));
+          if(!user) {
+            const err = document.getElementById('forgotError');
+            err.textContent = 'User not found!';
+            err.style.display = 'block';
+            return;
+          }
+          user.pass = newPass;
+          saveAllData();
+          alert('Password updated! You can now login.');
+          renderLogin();
+        };
+      };
+      document.getElementById('loginForm').onsubmit = function(e) {
+        e.preventDefault();
+        let role = '';
+        document.querySelectorAll('#loginRoleCheckboxes input[type=checkbox]').forEach(cb=>{if(cb.checked)role=cb.value;});
+        if(!role) {
+          const err = document.getElementById('loginError');
+          err.textContent = 'Please select a role!';
+          err.style.display = 'block';
+          return;
+        }
+        const name = document.getElementById('loginName').value.trim();
+        const pass = document.getElementById('loginPass').value
+        let regno = '', className = '';
+        if(role==='student') {
+          regno = document.getElementById('loginRegno').value.trim();
+          className = document.getElementById('loginClass').value.trim();
+        }
+        let found = users.find(u => u.role===role && u.user===name && u.pass===pass && (role!=='student'||(u.regno===regno&&u.class===className)));
+        if(found) {
+          currentUser = found.user;
+          currentRole = found.role;
+          showTabs(found.role);
+          showSection('profile');
+        } else {
+          const err = document.getElementById('loginError');
+          err.textContent = 'Invalid credentials!';
+          err.style.display = 'block';
+        }
+      };
+      setActiveTab('login');
+    }
+
+    function renderRegister() {
+      document.getElementById('sectionContent').innerHTML = `
+        <div class='section active fade-in'>
+          <h2>Register</h2>
+          <div id='regError' class='error' style='display:none;'></div>
+          <form id='regForm'>
+            <div class='form-group'><label>Role</label>
+              <div id='regRoleCheckboxes' style='display:flex;gap:18px;'>
+                <label class='switch-label'><input type='checkbox' class='switch-checkbox' name='regRole' value='student'><span class='switch-slider'></span><span class='switch-label-text'>Student</span></label>
+                <label class='switch-label'><input type='checkbox' class='switch-checkbox' name='regRole' value='teacher'><span class='switch-slider'></span><span class='switch-label-text'>Teacher</span></label>
+                <label class='switch-label'><input type='checkbox' class='switch-checkbox' name='regRole' value='admin'><span class='switch-slider'></span><span class='switch-label-text'>Admin</span></label>
+              </div>
+            </div>
+            <div class='form-group'><label>Name</label><input id='regName' required></div>
+            <div class='form-group'><label>Register Number</label><input id='regRegno'></div>
+            <div class='form-group'><label>Password</label><input id='regPass' type='password' required></div>
+            <div class='form-group student-only' style='display:none;'><label>Class</label><input id='regClass'></div>
+            <button type='submit' style='margin-right:10px;'>Register</button>
+          </form>
+        </div>`;
+      // Only allow one checkbox to be selected at a time (custom switch)
+      document.querySelectorAll('#regRoleCheckboxes .switch-checkbox').forEach(cb => {
+        cb.onclick = function() {
+          document.querySelectorAll('#regRoleCheckboxes .switch-checkbox').forEach(other => {
+            if(other!==cb) other.checked = false;
+          });
+          const v = cb.checked ? cb.value : '';
+          document.querySelectorAll('.student-only').forEach(e=>e.style.display=(v==='student'?'block':'none'));
+        };
+      });
+      document.getElementById('regForm').onsubmit = function(e) {
+        e.preventDefault();
+        let role = '';
+        document.querySelectorAll('#regRoleCheckboxes .switch-checkbox').forEach(cb=>{if(cb.checked)role=cb.value;});
+        if(!role) {
+          const err = document.getElementById('regError');
+          err.textContent = 'Please select a role!';
+          err.style.display = 'block';
+          return;
+        }
+        const name = document.getElementById('regName').value.trim();
+        const pass = document.getElementById('regPass').value;
+        let regno = '', className = '';
+        if(role==='student') {
+          regno = document.getElementById('regRegno').value.trim();
+          className = document.getElementById('regClass').value.trim();
+        }
+        if(users.find(u => u.role===role && u.user===name && (role!=='student'||(u.regno===regno&&u.class===className)))) {
+          const err = document.getElementById('regError');
+          err.textContent = 'User already exists!';
+          err.style.display = 'block';
+          return;
+        }
+        users.push({role: role, user: name, pass: pass, regno: regno, class: className});
+        if(role==='student') studentProfiles.push({user:name,regno:regno,class:className});
+        saveAllData();
+        alert('Registration successful! You can now login.');
+        renderLogin();
+      };
+      setActiveTab('register');
+    }
+
+    // --- Profile ---
+function renderProfile() {
+  if(!currentUser||!currentRole) return renderLogin();
+  let html = `<div class='section active fade-in'><h2><img src='https://img.icons8.com/fluency/28/user-male-circle.png' style='height:24px;vertical-align:middle;margin-right:7px;'>Profile</h2>`;
+  if(currentRole==='student') {
+    let profile = studentProfiles.find(s=>s.user===currentUser);
+    let userObj = users.find(u=>u.user===currentUser&&u.role==='student');
+    if(!profile) {
+      // fallback for old users
+      let u = userObj;
+      if(u) profile = {user:u.user, regno:u.regno, class:u.class, fatherName:'', fatherPhone:'', motherName:'', motherPhone:'', address:'', dob:'', pass:u.pass||''};
+    }
+    if(!profile) { html+=`<div class='error'>Profile not found.</div>`; }
+    else {
+      html+=`<form id='studentOwnProfileForm'><table class='profile-table'><tr>
+      <th>Name</th><th>Register No</th><th>Class</th><th>Password</th><th>Father Name</th><th>Father Phone</th><th>Mother Name</th><th>Mother Phone</th><th>Address</th><th>Date of Birth</th></tr>`;
+      html+=`<tr>
+        <td>${profile.user||''}</td>
+        <td>${profile.regno||''}</td>
+        <td>${profile.class||''}</td>
+        <td>${userObj && userObj.pass ? userObj.pass : ''}</td>
+        <td>${profile.fatherName||''}</td>
+        <td>${profile.fatherPhone||''}</td>
+        <td>${profile.motherName||''}</td>
+        <td>${profile.motherPhone||''}</td>
+        <td>${profile.address||''}</td>
+        <td><input type='date' id='studentDOB' value='${profile.dob||''}' style='width:130px;'></td>
+      </tr></table>
+      <button type='submit' class='action-btn' style='margin-top:12px;'>Update Date of Birth</button></form>`;
+    }
+  } else {
+    let user = users.find(u=>u.user===currentUser&&u.role===currentRole);
+    html+=`<table class='profile-table'><tr><th>Name</th><th>Role</th><th>Password</th></tr>
+    <tr><td>${user.user}</td><td>${user.role}</td><td>${user.pass||''}</td></tr></table>`;
+  }
+  html+='</div>';
+  document.getElementById('sectionContent').innerHTML = html;
+  setActiveTab('profile');
+  // Student can update only their DOB
+  if(currentRole==='student') {
+    let form = document.getElementById('studentOwnProfileForm');
+    if(form) {
+      form.onsubmit = function(e) {
+        e.preventDefault();
+        let profile = studentProfiles.find(s=>s.user===currentUser);
+        if(profile) {
+          profile.dob = document.getElementById('studentDOB').value;
+          saveAllData();
+          alert('Date of Birth updated!');
+        }
+      };
+    }
+  }
+}
+
+    // --- Student Profiles (admin/teacher only) ---
+function renderStudentProfiles() {
+  if(currentRole!=='teacher'&&currentRole!=='admin') return;
+  let html = `<div class='section active fade-in'><h2><img src='https://img.icons8.com/fluency/28/classroom.png' style='height:24px;vertical-align:middle;margin-right:7px;'>All Student Profiles</h2>`;
+  if(currentRole==='admin') {
+    html += `<div style='margin-bottom:18px;'>
+      <button class='action-btn' onclick='showAddStudentForm()'>+ Add/Upload Student</button>
+    </div>`;
+  }
+  // Group by class
+  let grouped = {};
+  studentProfiles.forEach(s=>{if(!grouped[s.class])grouped[s.class]=[];grouped[s.class].push(s);});
+  Object.keys(grouped).sort().forEach(cls=>{
+    html+=`<h3>Class ${cls}</h3><table class='profile-table'><tr>
+    <th>Name</th><th>Register No</th><th>Class</th><th>Password</th><th>Father Name</th><th>Father Phone</th><th>Mother Name</th><th>Mother Phone</th><th>Address</th><th>Date of Birth</th>`;
+    if(currentRole==='admin') html+='<th>Action</th>';
+    html+='</tr>';
+    grouped[cls].forEach((s,idx)=>{
+      let userObj = users.find(u=>u.user===s.user && u.regno===s.regno && u.role==='student');
+      if(s.editing && currentRole==='admin') {
+        html+=`<tr>
+        <td><input value='${s.user||''}' id='editUser${cls}${idx}' required></td>
+        <td>${s.regno||''}</td>
+        <td><input value='${s.class||''}' id='editClass${cls}${idx}' required></td>
+        <td>${userObj && userObj.pass ? userObj.pass : ''}</td>
+        <td><input value='${s.fatherName||''}' id='editFatherName${cls}${idx}' required></td>
+        <td><input value='${s.fatherPhone||''}' id='editFatherPhone${cls}${idx}' required></td>
+        <td><input value='${s.motherName||''}' id='editMotherName${cls}${idx}' required></td>
+        <td><input value='${s.motherPhone||''}' id='editMotherPhone${cls}${idx}' required></td>
+        <td><input value='${s.address||''}' id='editAddress${cls}${idx}'></td>
+        <td><input type='date' value='${s.dob||''}' id='editDOB${cls}${idx}'></td>
+        <td><button class='action-btn' onclick='saveStudentEdit("${cls}",${idx})'>Save</button><button class='action-btn' onclick='cancelStudentEdit("${cls}",${idx})'>Cancel</button></td>
+        </tr>`;
+      } else {
+        html+=`<tr>
+        <td>${s.user||''}</td>
+        <td>${s.regno||''}</td>
+        <td>${s.class||''}</td>
+        <td>${userObj && userObj.pass ? userObj.pass : ''}</td>
+        <td>${s.fatherName||''}</td>
+        <td>${s.fatherPhone||''}</td>
+        <td>${s.motherName||''}</td>
+        <td>${s.motherPhone||''}</td>
+        <td>${s.address||''}</td>
+        <td>${s.dob||''}</td>`;
+        if(currentRole==='admin') html+=`<td><button class='action-btn' onclick='editStudentProfile("${cls}",${idx})'>Edit</button></td>`;
+        html+='</tr>';
+      }
+    });
+    html+='</table>';
+  });
+  html+='</div>';
+  document.getElementById('sectionContent').innerHTML = html;
+  setActiveTab('students');
+}
+window.editStudentProfile = function(cls, idx) {
+  let grouped = {};
+  studentProfiles.forEach(s=>{if(!grouped[s.class])grouped[s.class]=[];grouped[s.class].push(s);});
+  let s = grouped[cls][idx];
+  s.editing = true;
+  renderStudentProfiles();
+}
+window.cancelStudentEdit = function(cls, idx) {
+  let grouped = {};
+  studentProfiles.forEach(s=>{if(!grouped[s.class])grouped[s.class]=[];grouped[s.class].push(s);});
+  let s = grouped[cls][idx];
+  s.editing = false;
+  renderStudentProfiles();
+}
+window.saveStudentEdit = function(cls, idx) {
+  let grouped = {};
+  studentProfiles.forEach(s=>{if(!grouped[s.class])grouped[s.class]=[];grouped[s.class].push(s);});
+  let s = grouped[cls][idx];
+  // Validate required fields
+  let user = document.getElementById('editUser'+cls+idx).value.trim();
+  let classVal = document.getElementById('editClass'+cls+idx).value.trim();
+  let fatherName = document.getElementById('editFatherName'+cls+idx).value.trim();
+  let fatherPhone = document.getElementById('editFatherPhone'+cls+idx).value.trim();
+  let motherName = document.getElementById('editMotherName'+cls+idx).value.trim();
+  let motherPhone = document.getElementById('editMotherPhone'+cls+idx).value.trim();
+  let address = document.getElementById('editAddress'+cls+idx).value.trim();
+  let dob = document.getElementById('editDOB'+cls+idx).value;
+  if(!user||!classVal||!fatherName||!fatherPhone||!motherName||!motherPhone) {
+    alert('Please fill all required fields.');
+    return;
+  }
+  s.user = user;
+  s.class = classVal;
+  s.fatherName = fatherName;
+  s.fatherPhone = fatherPhone;
+  s.motherName = motherName;
+  s.motherPhone = motherPhone;
+  s.address = address;
+  s.dob = dob;
+  s.editing = false;
+  saveAllData();
+  renderStudentProfiles();
+}
+window.showAddStudentForm = function() {
+  let html = `<div class='section active fade-in'><h2>Add/Upload Student</h2>
+    <form id='addStudentForm'>
+      <div class='form-group'><label>Name</label><input id='stuName' required></div>
+      <div class='form-group'><label>Register Number</label><input id='stuRegno' required></div>
+      <div class='form-group'><label>Class</label><input id='stuClass' required></div>
+      <div class='form-group'><label>Father Name</label><input id='stuFatherName' required></div>
+      <div class='form-group'><label>Father Phone</label><input id='stuFatherPhone' required></div>
+      <div class='form-group'><label>Mother Name</label><input id='stuMotherName' required></div>
+      <div class='form-group'><label>Mother Phone</label><input id='stuMotherPhone' required></div>
+      <div class='form-group'><label>Address (optional)</label><input id='stuAddress'></div>
+      <div class='form-group'><label>Date of Birth (optional)</label><input id='stuDOB' type='date'></div>
+      <button type='submit'>Add Student</button>
+      <button type='button' onclick='renderStudentProfiles()' style='margin-left:12px;'>Cancel</button>
+    </form></div>`;
+  document.getElementById('sectionContent').innerHTML = html;
+  document.getElementById('addStudentForm').onsubmit = function(e) {
+    e.preventDefault();
+    let name = document.getElementById('stuName').value.trim();
+    let regno = document.getElementById('stuRegno').value.trim();
+    let cls = document.getElementById('stuClass').value.trim();
+    let fatherName = document.getElementById('stuFatherName').value.trim();
+    let fatherPhone = document.getElementById('stuFatherPhone').value.trim();
+    let motherName = document.getElementById('stuMotherName').value.trim();
+    let motherPhone = document.getElementById('stuMotherPhone').value.trim();
+    let address = document.getElementById('stuAddress').value.trim();
+    let dob = document.getElementById('stuDOB').value;
+    if(studentProfiles.find(s=>s.user===name&&s.regno===regno&&s.class===cls)) {
+      alert('Student already exists!');
+      return;
+    }
+    studentProfiles.push({user:name,regno:regno,class:cls,fatherName,fatherPhone,motherName,motherPhone,address,dob});
+    users.push({role:'student',user:name,regno:regno,class:cls,pass:''});
+    saveAllData();
+    renderStudentProfiles();
+  };
+}
+
+    // --- Fees Section ---
+    function renderFees() {
+      if(!currentUser||!currentRole) return renderLogin();
+      let html = `<div class='section active fade-in'><h2><img src='https://img.icons8.com/fluency/28/money-bag.png' style='height:24px;vertical-align:middle;margin-right:7px;'>Fees</h2>`;
+      html += `<div class='subsection-tabs'>
+        <button class='subsection-btn' onclick='showFeesSub("receipt")'><img src='https://img.icons8.com/fluency/20/receipt-approved.png' style='height:18px;vertical-align:middle;'> Fees Receipt</button>
+        <button class='subsection-btn' onclick='showFeesSub("structure")'><img src='https://img.icons8.com/fluency/20/table.png' style='height:18px;vertical-align:middle;'> Fees Structure</button>
+        <button class='subsection-btn' onclick='showFeesSub("balance")'><img src='https://img.icons8.com/fluency/20/money-bag.png' style='height:18px;vertical-align:middle;'> Balance</button>
+        <button class='subsection-btn' onclick='showFeesSub("history")'><img src='https://img.icons8.com/fluency/20/time-machine.png' style='height:18px;vertical-align:middle;'> Fees History</button>
+      </div>`;
+      html += `<div id='feesSubContent'></div></div>`;
+      document.getElementById('sectionContent').innerHTML = html;
+      setActiveTab('fees');
+      showFeesSub('receipt');
+    }
+    window.showFeesSub = function(sub) {
+      document.querySelectorAll('.subsection-btn').forEach(btn=>btn.classList.remove('active'));
+      let idx = ['receipt','structure','balance','history'].indexOf(sub);
+      if(idx>=0) document.querySelectorAll('.subsection-btn')[idx].classList.add('active');
+      let html = '';
+      // --- FEES RECEIPT ---
+      if(sub==='receipt') {
+        html = `<h3><img src='https://img.icons8.com/fluency/22/receipt-approved.png' style='height:18px;vertical-align:middle;margin-right:5px;'>Fees Receipt</h3>`;
+        if(currentRole==='admin') {
+          html += `<form id='addReceiptForm' style='margin-bottom:18px;'>
+            <div class='form-group'><label>Student Name</label><input id='receiptName' required></div>
+            <div class='form-group'><label>Register Number</label><input id='receiptRegno' required></div>
+            <div class='form-group'><label>Class</label><input id='receiptClass' required></div>
+            <div class='form-group'><label>Amount</label><input id='receiptAmount' type='number' required></div>
+            <div class='form-group'><label>Month</label><input id='receiptMonth' required></div>
+            <button type='submit'>Add Receipt</button>
+          </form>`;
+        }
+        // Show latest receipt for student or allow download for student/teacher
+        if(currentRole==='student' || currentRole==='teacher') {
+          let myReceipts = [];
+          if(currentRole==='student') {
+            myReceipts = feesHistory.filter(f=>f.type==='receipt' && f.name===currentUser);
+          } else if(currentRole==='teacher') {
+            // Teachers can see all receipts, grouped by student
+            // Optionally, you can filter by class or show all
+            myReceipts = feesHistory.filter(f=>f.type==='receipt');
+          }
+          if(myReceipts.length>0) {
+            if(currentRole==='student') {
+              let r = myReceipts[myReceipts.length-1];
+              html += `<table class='fees-table'><tr><th>Amount</th><th>Month</th><th>Date</th><th>Download</th></tr>
+                <tr><td>${r.amount}</td><td>${r.month}</td><td>${r.date}</td><td><button class='action-btn' onclick='downloadReceipt(${feesHistory.indexOf(r)})'>Download</button></td></tr></table>`;
+            } else if(currentRole==='teacher') {
+              html += `<table class='fees-table'><tr><th>Student</th><th>Reg No</th><th>Class</th><th>Amount</th><th>Month</th><th>Date</th><th>Download</th></tr>`;
+              myReceipts.forEach(r=>{
+                html += `<tr><td>${r.name}</td><td>${r.regno}</td><td>${r.class}</td><td>${r.amount}</td><td>${r.month}</td><td>${r.date}</td><td><button class='action-btn' onclick='downloadReceipt(${feesHistory.indexOf(r)})'>Download</button></td></tr>`;
+              });
+              html += `</table>`;
+            }
+          } else {
+            html += `<div style='text-align:center;color:#888;'>No receipt uploaded yet.</div>`;
+          }
+        } else {
+          html += `<div style='text-align:center;color:#888;'>${currentRole==='admin'?"Admin can upload receipts here.":"Your latest receipt will appear here."}</div>`;
+        }
+    // Download receipt as PDF (for student/teacher)
+    window.downloadReceipt = function(idx) {
+      if(typeof idx !== 'number' || !feesHistory[idx]) return;
+      const r = feesHistory[idx];
+      // Create a simple PDF using jsPDF (CDN loaded if not present)
+      function doPDF() {
+        const doc = new window.jspdf.jsPDF();
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(18);
+        doc.text('SCIENTIA TUITION CENTRE', 105, 20, {align:'center'});
+        doc.setFontSize(14);
+        doc.setFont('helvetica', 'normal');
+        doc.text('FEES RECEIPT', 105, 32, {align:'center'});
+        doc.setLineWidth(0.5);
+        doc.line(30, 38, 180, 38);
+        doc.setFontSize(12);
+        let y = 50;
+        doc.text(`Student Name:`, 35, y); doc.text(`${r.name}`, 90, y);
+        y += 10;
+        doc.text(`Register Number:`, 35, y); doc.text(`${r.regno}`, 90, y);
+        y += 10;
+        doc.text(`Class:`, 35, y); doc.text(`${r.class}`, 90, y);
+        y += 10;
+        doc.text(`Amount:`, 35, y); doc.text(`${r.amount}`, 90, y);
+        y += 10;
+        doc.text(`Month:`, 35, y); doc.text(`${r.month}`, 90, y);
+        y += 10;
+        doc.text(`Date:`, 35, y); doc.text(`${r.date}`, 90, y);
+        y += 15;
+        doc.setLineWidth(0.2);
+        doc.line(30, y, 180, y);
+        doc.save(`Receipt_${r.name}_${r.regno}_${r.month}.pdf`);
+      }
+      if(typeof window.jspdf === 'undefined') {
+        // Load jsPDF from CDN if not present
+        const script = document.createElement('script');
+        script.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+        script.onload = doPDF;
+        document.body.appendChild(script);
+      } else {
+        doPDF();
+      }
+    }
+      }
+      // --- FEES STRUCTURE ---
+      else if(sub==='structure') {
+        html = `<h3><img src='https://img.icons8.com/fluency/22/table.png' style='height:18px;vertical-align:middle;margin-right:5px;'>Fees Structure</h3>`;
+        // --- Marvel-style colorful table for Fees Structure ---
+        // Admin: Table-based CRUD for Fees Name, Amount, Due Date
+        if(currentRole==='admin') {
+          let structures = feesHistory.filter(f=>f.type==='structure');
+          html += `<form id='addStructureForm' style='margin-bottom:18px;'>
+            <table class='fees-table marvel-fees-table'><tr>
+              <th style='background:#e23636;color:#fff;'>Class</th>
+              <th style='background:#e23636;color:#fff;'>Fees Name</th>
+              <th style='background:#f9d923;color:#222;'>Amount (₹)</th>
+              <th style='background:#3ec1d3;color:#fff;'>Due Date</th>
+              <th style='background:#283149;color:#fff;'>Action</th>
+            </tr>`;
+          structures.forEach((s, idx) => {
+            if(s.editing) {
+              html += `<tr>
+                <td><input value='${s.class||''}' id='editStructureClass${idx}' required style='width:90px;'></td>
+                <td><input value='${s.feesName||''}' id='editStructureFeesName${idx}' required style='width:120px;'></td>
+                <td><input type='number' value='${s.amount||''}' id='editStructureAmount${idx}' required style='width:90px;'></td>
+                <td><input type='date' value='${s.dueDate||''}' id='editStructureDueDate${idx}' required></td>
+                <td><button type='button' class='action-btn' onclick='saveStructureEdit(${idx})'>Save</button><button type='button' class='action-btn' onclick='cancelStructureEdit(${idx})'>Cancel</button></td>
+              </tr>`;
+            } else {
+              html += `<tr style='background:${idx%2===0?"#fbeee0":"#e3f6f5"};'>
+                <td style='font-weight:600;color:#e23636;'>${s.class||''}</td>
+                <td style='font-weight:600;color:#e23636;'>${s.feesName||''}</td>
+                <td style='font-weight:600;color:#f9a826;'>₹${s.amount||''}</td>
+                <td style='font-weight:600;color:#3ec1d3;'>${s.dueDate||''}</td>
+                <td><button type='button' class='action-btn' onclick='editStructure(${idx})'>Edit</button><button type='button' class='action-btn' onclick='deleteStructure(${idx})'>Delete</button></td>
+              </tr>`;
+            }
+          });
+          // Add new row
+          html += `<tr style='background:#fff;'>
+            <td><input id='structureClass' required style='width:90px;'></td>
+            <td><input id='structureFeesName' required style='width:120px;'></td>
+            <td><input id='structureAmount' type='number' required style='width:90px;'></td>
+            <td><input id='structureDueDate' type='date' required></td>
+            <td><button type='submit' class='action-btn'>Add</button></td>
+          </tr>`;
+          html += `</table></form>`;
+        }
+        // Show structure for all users (Marvel-style table, no filtering)
+        let structures = feesHistory.filter(f=>f.type==='structure');
+        if(structures.length > 0) {
+          html += `<div style='margin-top:10px;'><table class='fees-table marvel-fees-table' style='box-shadow:0 4px 24px #e2363640,0 1.5px 0 #f9d923;'>
+            <tr>
+              <th style='background:#e23636;color:#fff;'>Class</th>
+              <th style='background:#e23636;color:#fff;'>Fees Name</th>
+              <th style='background:#f9d923;color:#222;'>Amount (₹)</th>
+              <th style='background:#3ec1d3;color:#fff;'>Due Date</th>
+            </tr>`;
+          structures.forEach((s, idx) => {
+            html += `<tr style='background:${idx%2===0?"#fbeee0":"#e3f6f5"};'>
+              <td style='font-weight:600;color:#e23636;'>${s.class||''}</td>
+              <td style='font-weight:600;color:#e23636;'>${s.feesName||''}</td>
+              <td style='font-weight:600;color:#f9a826;'>₹${s.amount||''}</td>
+              <td style='font-weight:600;color:#3ec1d3;'>${s.dueDate||''}</td>
+            </tr>`;
+          });
+          html += `</table></div>`;
+        } else {
+          html += `<div style='text-align:center;color:#888;'>No fees structure uploaded yet.</div>`;
+        }
+        // Admin: form logic for add/edit/delete
+        if(currentRole==='admin') {
+          window.editStructure = function(idx) {
+            let structures = feesHistory.filter(f=>f.type==='structure');
+            structures.forEach((s,i)=>s.editing=(i===idx));
+            showFeesSub('structure');
+          };
+          window.cancelStructureEdit = function(idx) {
+            let structures = feesHistory.filter(f=>f.type==='structure');
+            structures.forEach(s=>delete s.editing);
+            showFeesSub('structure');
+          };
+          window.saveStructureEdit = function(idx) {
+           
+            let structures = feesHistory.filter(f=>f.type==='structure');
+            let s = structures[idx];
+            let classVal = document.getElementById('editStructureClass'+idx).value.trim();
+            let feesName = document.getElementById('editStructureFeesName'+idx).value.trim();
+            let amount = document.getElementById('editStructureAmount'+idx).value.trim();
+            let dueDate = document.getElementById('editStructureDueDate'+idx).value;
+           
+            s.class = classVal;
+            s.feesName = feesName;
+            s.amount = amount;
+            s.dueDate = dueDate;
+            s.date = new Date().toLocaleString();
+            delete s.editing;
+            saveAllData();
+            showFeesSub('structure');
+          };
+          window.deleteStructure = function(idx) {
+            if(confirm('Delete this structure?')) {
+              let structures = feesHistory.filter(f=>f.type==='structure');
+              let s = structures[idx];
+              let i = feesHistory.indexOf(s);
+              if(i>=0) feesHistory.splice(i,1);
+              saveAllData();
+              showFeesSub('structure');
+            }
+          };
+          if(document.getElementById('addStructureForm')) {
+            document.getElementById('addStructureForm').onsubmit = function(e) {
+              e.preventDefault();
+              let classVal = document.getElementById('structureClass').value.trim();
+              let feesName = document.getElementById('structureFeesName').value.trim();
+              let amount = document.getElementById('structureAmount').value.trim();
+              let dueDate = document.getElementById('structureDueDate').value;
+              if(!classVal||!feesName||!amount||!dueDate) { alert('Please fill all fields.'); return; }
+              let date = new Date().toLocaleString();
+              feesHistory.push({type:'structure', class:classVal, feesName, amount, dueDate, date});
+              saveAllData();
+              showFeesSub('structure');
+            };
+          }
+        }
+      }
+      // --- FEES BALANCE ---
+      else if(sub==='balance') {
+        html = `<h3><img src='https://img.icons8.com/fluency/22/money-bag.png' style='height:18px;vertical-align:middle;margin-right:5px;'>Balance</h3>`;
+        if(currentRole==='admin') {
+          html += `<form id='addBalanceForm' style='margin-bottom:18px;'>
+            <div class='form-group'><label>Student Name</label><input id='balanceName' required autocomplete='off'></div>
+            <div class='form-group'><label>Register Number</label><input id='balanceRegno' required autocomplete='off'></div>
+            <div class='form-group'><label>Class</label><input id='balanceClass' required autocomplete='off'></div>
+            <div class='form-group'><label>Father Number</label><input id='balanceFatherPhone' readonly style='background:#f7f7fa;'></div>
+            <div class='form-group'><label>Balance</label><input id='balanceAmount' type='number' required></div>
+            <button type='submit'>Add Balance</button>
+          </form>`;
+        }
+        // Show ALL balances for all users in a table (no filtering)
+        let balances = feesHistory.filter(f=>f.type==='balance');
+        if(balances.length > 0) {
+          html += `<table class='fees-table marvel-fees-table' style='max-width:900px;margin:0 auto;'>`;
+          html += `<tr>
+            <th style='background:#e23636;color:#fff;'>Name</th>
+            <th style='background:#f9d923;color:#222;'>Register No</th>
+            <th style='background:#3ec1d3;color:#fff;'>Class</th>
+            <th style='background:#3ec1d3;color:#fff;'>Father Number</th>
+            <th style='background:#20bf6b;color:#fff;'>Balance</th>
+            <th style='background:#a18cd1;color:#fff;'>Month</th>
+            <th style='background:#283149;color:#fff;'>Date</th>
+          </tr>`;
+          balances.forEach((b,idx) => {
+            html += `<tr style='background:${idx%2===0?"#fbeee0":"#e3f6f5"};'>
+              <td style='font-weight:600;color:#e23636;'>${b.name}</td>
+              <td style='font-weight:600;color:#f9a826;'>${b.regno}</td>
+              <td style='font-weight:600;color:#3ec1d3;'>${b.class}</td>
+              <td style='font-weight:600;color:#3ec1d3;'>${b.fatherPhone||''}</td>
+              <td style='font-weight:600;color:#20bf6b;'>₹${b.amount}</td>
+              <td style='font-weight:600;color:#a18cd1;'>${b.month||''}</td>
+              <td style='font-weight:600;color:#283149;'>${b.date||''}</td>
+            </tr>`;
+          });
+          html += `</table>`;
+        } else {
+          html += `<div style='text-align:center;color:#888;'>No balance uploaded yet.</div>`;
+        }
+        // Auto-fill father number logic
+        function autofillFatherPhone() {
+          const name = document.getElementById('balanceName').value.trim();
+          const regno = document.getElementById('balanceRegno').value.trim();
+          const cls = document.getElementById('balanceClass').value.trim();
+          let fatherPhone = '';
+          let profile = studentProfiles.find(s => s.user === name && s.regno === regno && s.class === cls);
+          if(profile) fatherPhone = profile.fatherPhone || '';
+          document.getElementById('balanceFatherPhone').value = fatherPhone;
+        }
+        ['balanceName','balanceRegno','balanceClass'].forEach(id => {
+          const el = document.getElementById(id);
+          if(el) el.addEventListener('input', autofillFatherPhone);
+        });
+        if(document.getElementById('addBalanceForm')) {
+          document.getElementById('addBalanceForm').onsubmit = function(e) {
+            e.preventDefault();
+            let name = document.getElementById('balanceName').value.trim();
+            let regno = document.getElementById('balanceRegno').value.trim();
+            let cls = document.getElementById('balanceClass').value.trim();
+            let fatherPhone = document.getElementById('balanceFatherPhone').value.trim();
+            let amount = document.getElementById('balanceAmount').value.trim();
+            let month = document.getElementById('balanceMonth') ? document.getElementById('balanceMonth').value.trim() : '';
+            let date = new Date().toLocaleString();
+            feesHistory.push({name, regno, class:cls, fatherPhone, amount, month, type:'balance', date});
+            saveAllData();
+            alert('Balance added (in-memory only).');
+            showFeesSub('balance');
+          };
+        }
+      }
+      // --- FEES HISTORY ---
+      else if(sub==='history') {
+        html = `<h3><img src='https://img.icons8.com/fluency/22/time-machine.png' style='height:18px;vertical-align:middle;margin-right:5px;'>Fees History</h3>`;
+        if(currentRole==='admin') {
+          html += `<form id='addHistoryForm' style='margin-bottom:18px;'>
+            <div class='form-group'><label>Student Name</label><input id='historyName' required></div>
+            <div class='form-group'><label>Register Number</label><input id='historyRegno' required></div>
+            <div class='form-group'><label>Class</label><input id='historyClass' required></div>
+            <div class='form-group'><label>Amount</label><input id='historyAmount' type='number' required></div>
+            <div class='form-group'><label>Month</label><input id='historyMonth' required></div>
+            <button type='submit'>Add History</button>
+          </form>`;
+        }
+        // Show fees history for all roles
+        let historyToShow = [];
+        if(currentRole==='student') {
+          historyToShow = feesHistory.filter(f=>f.name===currentUser);
+        } else if(currentRole==='teacher' || currentRole==='admin') {
+          historyToShow = feesHistory;
+        }
+        if(historyToShow.length>0) {
+          html += `<table class='fees-table'><tr>`;
+          if(currentRole==='teacher' || currentRole==='admin') {
+            html += `<th>Student</th><th>Reg No</th><th>Class</th>`;
+          }
+          html += `<th>Type</th><th>Amount</th><th>Month</th><th>Date</th></tr>`;
+          historyToShow.forEach(r=>{
+            html += `<tr>`;
+            if(currentRole==='teacher' || currentRole==='admin') {
+              html += `<td>${r.name}</td><td>${r.regno}</td><td>${r.class}</td>`;
+            }
+            html += `<td>${r.type==='receipt'?'Receipt':'History'}</td><td>${r.amount}</td><td>${r.month}</td><td>${r.date}</td></tr>`;
+          });
+          html += `</table>`;
+        } else {
+          html += `<div style='text-align:center;color:#888;'>No payment history yet.</div>`;
+        }
+      }
+      document.getElementById('feesSubContent').innerHTML = html;
+
+      // Attach form handlers for admin
+      if(currentRole==='admin') {
+        if(document.getElementById('addReceiptForm')) {
+          document.getElementById('addReceiptForm').onsubmit = function(e) {
+            e.preventDefault();
+            let name = document.getElementById('receiptName').value.trim();
+            let regno = document.getElementById('receiptRegno').value.trim();
+            let cls = document.getElementById('receiptClass').value.trim();
+            let amount = document.getElementById('receiptAmount').value.trim();
+            let month = document.getElementById('receiptMonth').value.trim();
+            let date = new Date().toLocaleString();
+            feesHistory.push({name, regno, class:cls, amount, month, type:'receipt', date});
+            saveAllData();
+            alert('Receipt added.');
+            // After adding, show history tab for that student if admin is viewing their record, else refresh receipt
+            showFeesSub('receipt');
+          };
+        }
+        if(document.getElementById('addStructureForm')) {
+          document.getElementById('addStructureForm').onsubmit = function(e) {
+            e.preventDefault();
+            alert('Structure added (in-memory only).');
+            showFeesSub('structure');
+          };
+        }
+        if(document.getElementById('addBalanceForm')) {
+          document.getElementById('addBalanceForm').onsubmit = function(e) {
+            e.preventDefault();
+            alert('Balance added (in-memory only).');
+            showFeesSub('balance');
+          };
+        }
+        if(document.getElementById('addHistoryForm')) {
+          document.getElementById('addHistoryForm').onsubmit = function(e) {
+            e.preventDefault();
+            let name = document.getElementById('historyName').value.trim();
+            let regno = document.getElementById('historyRegno').value.trim();
+            let cls = document.getElementById('historyClass').value.trim();
+            let amount = document.getElementById('historyAmount').value.trim();
+            let month = document.getElementById('historyMonth').value.trim();
+            let date = new Date().toLocaleString();
+            feesHistory.push({name, regno, class:cls, amount, month, type:'history', date});
+            saveAllData();
+            alert('History added.');
+            showFeesSub('history');
+          };
+        }
+      }
+    }
+
+    // --- Exam Mark Section ---
+    function renderExam() {
+      if(!currentUser||!currentRole) return renderLogin();
+      let html = `<div class='section active fade-in'><h2><img src='https://img.icons8.com/fluency/28/test-passed.png' style='height:24px;vertical-align:middle;margin-right:7px;'>Exam Mark</h2>`;
+      // Get all exam names
+      let examNames = examMarkData.exams.map(e=>e.examName);
+      let selectedExam = window.selectedExamName || '';
+      if(currentRole==='student' && examNames.length > 0) {
+        html += `<div style='margin-bottom:16px;'>
+          <label for='examNameSelect' style='font-weight:600;'>Select Exam Name: </label>
+          <select id='examNameSelect' style='padding:4px 10px;border-radius:6px;border:1.5px solid #bbb;'>
+            <option value=''>-- Select --</option>`;
+        examNames.forEach(name => {
+          html += `<option value='${name}' ${selectedExam===name?'selected':''}>${name}</option>`;
+        });
+        html += `</select></div>`;
+      }
+      if(currentRole==='teacher'||currentRole==='admin') {
+        html += `<div style='margin-bottom:16px;'>
+          <label for='examNameInput' style='font-weight:600;'>Exam Name: </label>
+          <input id='examNameInput' style='padding:4px 10px;border-radius:6px;border:1.5px solid #bbb;width:180px;' list='examNameList'>
+          <datalist id='examNameList'>${examNames.map(n=>`<option value='${n}'>`).join('')}</datalist>
+          <label for='examClassInput' style='font-weight:600;margin-left:18px;'>Class: </label>
+          <input id='examClassInput' style='padding:4px 10px;border-radius:6px;border:1.5px solid #bbb;width:90px;'>
+          <button class='action-btn' onclick='addExamMarkRow()'>+ Add Mark</button>
+        </div>`;
+        // Column management UI
+        html += `<div style='margin-bottom:16px;'>
+          <label style='font-weight:600;'>Manage Columns:</label> `;
+        examMarkData.columns.forEach((col, idx) => {
+          html += `<input type='text' value='${col}' style='width:120px;margin-right:6px;' onchange='renameExamCol(${idx},this.value)'>`;
+          if(idx>2) html += `<button class='action-btn' style='background:#dc3545;color:#fff;padding:2px 8px;' onclick='removeExamCol(${idx})'>×</button>`;
+        });
+        html += `<button class='action-btn' style='margin-left:12px;' onclick='addExamCol()'>+ Add Column</button>`;
+        html += `</div>`;
+      }
+      html += `<div id='examTableDiv'></div></div>`;
+      document.getElementById('sectionContent').innerHTML = html;
+      setActiveTab('exam');
+      // Student: handle exam name selection
+      if(currentRole==='student' && examNames.length > 0) {
+        document.getElementById('examNameSelect').onchange = function() {
+          window.selectedExamName = this.value;
+          renderExam();
+        };
+      } else {
+        window.selectedExamName = '';
+      }
+      renderExamTable();
+    }
+    function renderExamTable() {
+      let html = '';
+      if(currentRole==='student') {
+        let selectedExam = window.selectedExamName || '';
+        if(!selectedExam) {
+          html += `<div style='color:#888;text-align:center;'>Select an exam name to view your marks.</div>`;
+        } else {
+          // Find all exam entries for selected exam and student's class
+          let userObj = users.find(u=>u.user===currentUser && u.role==='student');
+          let examEntries = examMarkData.exams.filter(e=>e.examName===selectedExam && e.class===userObj.class);
+          if(examEntries.length>0) {
+            let marks = examEntries[0].marks.filter(m=>m['Register Number']===userObj.regno && m['Student Name']===userObj.user);
+            html += `<table class='exam-table'><tr>`;
+            examMarkData.columns.forEach(col=>{ html += `<th>${col}</th>`; });
+            html += `</tr>`;
+            if(marks.length>0) {
+              marks.forEach(m=>{
+                html += `<tr>`;
+                examMarkData.columns.forEach(col=>{ html += `<td>${m[col]||''}</td>`; });
+                html += `</tr>`;
+              });
+            } else {
+              html += `<tr><td colspan='${examMarkData.columns.length}'>No marks found for your account.</td></tr>`;
+            }
+            html += `</table>`;
+          } else {
+            html += `<div style='color:#888;text-align:center;'>No marks found for this exam.</div>`;
+          }
+        }
+      } else {
+        // Teacher/admin: show all exams grouped by class
+        if(examMarkData.exams.length===0) {
+          html += `<div style='color:#888;text-align:center;'>No exam marks entered yet.</div>`;
+        } else {
+          // Group exams by exam name, then by class
+          let examsByName = {};
+          examMarkData.exams.forEach(e=>{
+            if(!examsByName[e.examName]) examsByName[e.examName] = {};
+            if(!examsByName[e.examName][e.class]) examsByName[e.examName][e.class] = [];
+            examsByName[e.examName][e.class].push(e);
+          });
+          Object.keys(examsByName).forEach(examName => {
+            html += `<h3 style='margin:18px 0 8px 0;color:#e23636;'>Exam: ${examName}</h3>`;
+            Object.keys(examsByName[examName]).sort().forEach(cls => {
+              html += `<h4 style='margin:8px 0 8px 0;color:#3ec1d3;'>Class ${cls}</h4>`;
+              html += `<table class='exam-table' style='margin-bottom:24px;'><tr>`;
+              examMarkData.columns.forEach(col=>{ html += `<th>${col}</th>`; });
+              html += `<th>Action</th></tr>`;
+              examsByName[examName][cls].forEach(e => {
+                e.marks.forEach((m,mi) => {
+                  html += `<tr>`;
+                  examMarkData.columns.forEach((col,ci)=>{
+                    html += `<td><input type='text' value='${m[col]||''}' data-exam='${examName}' data-class='${cls}' data-mi='${mi}' data-ci='${ci}' onchange='updateExamMarkField("${examName}","${cls}",${mi},"${col}",this.value)' style='width:100px;background:#fffbe6;border:1.5px solid #bbb;'></td>`;
+                  });
+                  html += `<td><button class='action-btn' onclick='removeExamMark("${examName}","${cls}",${mi})'>Delete</button></td>`;
+                  html += `</tr>`;
+                });
+              });
+              html += `</table>`;
+            });
+          });
+        }
+      }
+      document.getElementById('examTableDiv').innerHTML = html;
+    }
+// Add a new mark row for a given exam and class
+window.addExamMarkRow = function() {
+  const examName = document.getElementById('examNameInput').value.trim();
+  const cls = document.getElementById('examClassInput').value.trim();
+  if(!examName || !cls) { alert('Please enter exam name and class.'); return; }
+  let markObj = {};
+  for(let i=0; i<examMarkData.columns.length; i++) {
+    let col = examMarkData.columns[i];
+    let val = prompt('Enter '+col+':');
+    if(val===null) return;
+    markObj[col] = val;
+  }
+  // Find or create exam/class entry
+  let examEntry = examMarkData.exams.find(e=>e.examName===examName && e.class===cls);
+  if(!examEntry) {
+    examEntry = {examName, class:cls, marks:[]};
+    examMarkData.exams.push(examEntry);
+  }
+  examEntry.marks.push(markObj);
+  saveAllData();
+  renderExam();
+}
+window.updateExamMarkField = function(examName, cls, mi, col, val) {
+  let examEntry = examMarkData.exams.find(e=>e.examName===examName && e.class===cls);
+  if(examEntry && examEntry.marks[mi]) {
+    examEntry.marks[mi][col] = val;
+    saveAllData();
+  }
+}
+// ...existing code...
+window.removeExamMark = function(examName, cls, mi) {
+  let examEntry = examMarkData.exams.find(e=>e.examName===examName && e.class===cls);
+  if(examEntry && examEntry.marks[mi]) {
+    examEntry.marks.splice(mi,1);
+    saveAllData();
+    renderExam();
+  }
+}
+window.addExamCol = function() {
+  let col = prompt('Enter new column name:');
+  if(!col) return;
+  if(examMarkData.columns.includes(col)) { alert('Column already exists!'); return; }
+  examMarkData.columns.push(col);
+  saveAllData();
+  renderExam();
+}
+window.renameExamCol = function(idx, val) {
+  if(!val) return;
+  examMarkData.columns[idx] = val;
+  saveAllData();
+  renderExam();
+}
+window.removeExamCol = function(idx) {
+  if(idx<=2) return alert('Cannot remove Register Number, Student Name, or Class columns.');
+  examMarkData.columns.splice(idx,1);
+  // Remove field from all marks
+  examMarkData.exams.forEach(e=>{
+    e.marks.forEach(m=>{ delete m[examMarkData.columns[idx]]; });
+  });
+  saveAllData();
+  renderExam();
+}
+    window.removeExamCol = function(idx) {
+      if(idx<=2) return alert('Cannot remove Register Number, Student Name, or Class columns.');
+      examMarkData.columns.splice(idx,1);
+      examMarkData.rows.forEach(r=>r.splice(idx,1));
+      saveAllData();
+      renderExamTable();
+    }
+    window.addExamRow = function() {
+      let row = Array(examMarkData.columns.length).fill('');
+      row.editing = true;
+      examMarkData.rows.push(row);
+      saveAllData();
+      renderExamTable();
+    }
+    window.editExamRow = function(ri) {
+      examMarkData.rows.forEach((r,i)=>r.editing=(i===ri));
+      saveAllData();
+      renderExamTable();
+    }
+    window.saveExamRow = function(ri) {
+      examMarkData.rows[ri].editing = false;
+      saveAllData();
+      renderExamTable();
+    }
+    window.cancelExamRow = function(ri) {
+      if(examMarkData.rows[ri].every(cell=>!cell)) examMarkData.rows.splice(ri,1);
+      else examMarkData.rows[ri].editing = false;
+      saveAllData();
+      renderExamTable();
+    }
+    window.removeExamRow = function(ri) {
+      if(confirm('Delete this row?')) { examMarkData.rows.splice(ri,1); saveAllData(); renderExamTable(); }
+    }
+    window.updateExamCell = function(ri,ci,val) {
+      examMarkData.rows[ri][ci]=val;
+      saveAllData();
+    }
+
+    // --- Admin Users Section (Head Admin Only for Remove) ---
+    function renderAdminUsers() {
+      if(currentRole!=='admin') return;
+      let html = `<div class='section active fade-in'><h2><img src='https://img.icons8.com/fluency/28/admin-settings-male.png' style='height:24px;vertical-align:middle;margin-right:7px;'>All User Details</h2>`;
+      if(isHeadAdmin()) {
+        html += `<button class='action-btn' style='background:#dc3545;color:#fff;margin-bottom:16px;' onclick='removeAllUsers()'>Remove All Users</button>`;
+        html += `<button class='action-btn' style='background:#ff9800;color:#fff;margin-bottom:16px;margin-left:12px;' onclick='if(confirm(\'Clear ALL portal data from this device?\'))clearAllData()'>Clear All Data (Device)</button>`;
+        html += `<div style='color:#dc3545;font-size:0.98rem;margin-bottom:12px;'>Caution: This will remove all users except the head admin.</div>`;
+      }
+      html += `<table class='profile-table'><tr><th>Name</th><th>Role</th><th>Register No</th><th>Class</th><th>Action</th></tr>`;
+      users.forEach((u, idx) => {
+        html += `<tr><td>${u.user}</td><td>${u.role}</td><td>${u.regno||''}</td><td>${u.class||''}</td><td>`;
+        if(isHeadAdmin() && u.user!=='Shahanas10S') {
+          html += `<button class='action-btn' style='background:#dc3545;color:#fff;' onclick='removeUser(${idx})'>Remove</button>`;
+        } else if(u.user==='Shahanas10S') {
+          html += `<span style='color:#20bf6b;font-weight:600;'>Head Admin</span>`;
+        } else {
+          html += `<span style='color:#aaa;'>No Access</span>`;
+        }
+        html += `</td></tr>`;
+      });
+      html += `</table></div>`;
+      document.getElementById('sectionContent').innerHTML = html;
+      setActiveTab('adminusers');
+    }
+    window.removeUser = function(idx) {
+      if(!isHeadAdmin()) return;
+      if(users[idx].user==='Shahanas10S') { alert('Cannot remove Head Admin!'); return; }
+      if(confirm('Remove this user?')) {
+        // Remove from users
+        let removed = users.splice(idx,1)[0];
+        // Remove from studentProfiles if student
+        if(removed.role==='student') {
+          let i = studentProfiles.findIndex(s=>s.user===removed.user&&s.regno===removed.regno&&s.class===removed.class);
+          if(i>=0) studentProfiles.splice(i,1);
+        }
+        saveAllData();
+        renderAdminUsers();
+      }
+    }
+    window.removeAllUsers = function() {
+      if(!isHeadAdmin()) return;
+      if(confirm('Remove ALL users except Head Admin?')) {
+        users = users.filter(u=>u.user==='Shahanas10S');
+        studentProfiles = [];
+        saveAllData();
+        renderAdminUsers();
+      }
+    }
+
+    // --- Init ---
+    loadAllData();
+    ensureHeadAdmin();
+    showTabs();
+    renderLogin();
+  </script>
+</body>
+</html>
